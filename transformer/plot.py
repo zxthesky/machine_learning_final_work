@@ -27,7 +27,13 @@ def plot_prediction(title, path_to_save, src, tgt, prediction, sensor_number, in
     idx_scr = index_in[0, 1:].tolist()
     idx_tgt = index_tar[0].tolist()
     idx_pred = [i for i in range(idx_scr[0] +1, idx_tgt[-1])] #t2 - t61
-
+    idx_scr = [i for i in range(1,97)]
+    idx_tgt = [i for i in range(96,192)]
+    idx_pred = [i for i in range(96,192)]
+    # print(len(idx_scr))
+    # print(len(idx_tgt))
+    # print(len(idx_pred))
+    # print(prediction)
     plt.figure(figsize=(15,6))
     plt.rcParams.update({"font.size" : 16})
 
@@ -36,18 +42,28 @@ def plot_prediction(title, path_to_save, src, tgt, prediction, sensor_number, in
     # prediction = np.append(src[-1], prediction.flatten())
 
     # plotting
-    plt.plot(idx_scr, src, '-', color = 'blue', label = 'Input', linewidth=2)
-    plt.plot(idx_tgt, tgt, '-', color = 'indigo', label = 'Target', linewidth=2)
-    plt.plot(idx_pred, prediction,'--', color = 'limegreen', label = 'Forecast', linewidth=2)
+    plt.plot(idx_scr, src, '-', color = 'blue', label = 'GroundTruth', linewidth=2)
+    plt.plot(idx_tgt, tgt, '-', color = 'blue', linewidth=2)
+    plt.plot(idx_pred, prediction[93:189],'-', color = 'orange', label = 'Prediction', linewidth=2)
+    sum1 = 0
+    sum2 = 0
+    for i in range(len(prediction[93:189])):
+        sum1+=(prediction[93:189][i][0]-tgt[i][0])**2
+        sum2+=abs(prediction[93:189][i][0]-tgt[i][0])
+    print(sum1/96)
+    print(sum2/96)
+    # print(tgt)
+    # print(prediction[93:429])
 
     #formatting
     plt.grid(b=True, which='major', linestyle = 'solid')
     plt.minorticks_on()
     plt.grid(b=True, which='minor', linestyle = 'dashed', alpha=0.5)
     plt.xlabel("Time Elapsed")
-    plt.ylabel("Humidity (%)")
+    plt.ylabel("OT")
     plt.legend()
-    plt.title("Forecast from Sensor " + str(sensor_number[0]))
+    # plt.title("Forecast from Sensor " + str(sensor_number[0]))
+    plt.title("Test State")
 
     # save
     plt.savefig(path_to_save+f"Prediction_{title}.png")
@@ -73,7 +89,7 @@ def plot_training(epoch, path_to_save, src, prediction, sensor_number, index_in,
 
     plt.title("Teaching Forcing from Sensor " + str(sensor_number[0]) + ", Epoch " + str(epoch))
     plt.xlabel("Time Elapsed")
-    plt.ylabel("Humidity (%)")
+    plt.ylabel("OT")
     plt.legend()
     plt.savefig(path_to_save+f"/Epoch_{str(epoch)}.png")
     plt.close()
@@ -100,7 +116,7 @@ def plot_training_3(epoch, path_to_save, src, sampled_src, prediction, sensor_nu
     plt.plot(idx_pred, prediction, 'o-.', color = 'limegreen', label = 'prediction sequence', linewidth=1)
     plt.title("Teaching Forcing from Sensor " + str(sensor_number[0]) + ", Epoch " + str(epoch))
     plt.xlabel("Time Elapsed")
-    plt.ylabel("Humidity (%)")
+    plt.ylabel("OT")
     plt.legend()
     plt.savefig(path_to_save+f"/Epoch_{str(epoch)}.png")
     plt.close()

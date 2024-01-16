@@ -42,9 +42,11 @@ def transformer(dataloader, EPOCH, k, frequency, path_to_save_model, path_to_sav
 
             optimizer.zero_grad()
             src = _input.permute(1,0,2).double().to(device)[:-1,:,:] # torch.Size([24, 1, 7])
+            # print(src.shape)
             target = _input.permute(1,0,2).double().to(device)[1:,:,:] # src shifted by 1.
             sampled_src = src[:1, :, :] #t0 torch.Size([1, 1, 7])
-
+            # print(target.shape)
+            # print(sampled_src.shape)
             for i in range(len(target)-1):
 
                 prediction = model(sampled_src, device) # torch.Size([1xw, 1, 1])

@@ -62,5 +62,14 @@ def inference(path_to_save_predictions, forecast_window, dataloader, device, pat
             target_humidity = scaler.inverse_transform(target[:,:,0].cpu())
             prediction_humidity = scaler.inverse_transform(all_predictions[:,:,0].detach().cpu().numpy())
             plot_prediction(plot, path_to_save_predictions, src_humidity, target_humidity, prediction_humidity, sensor_number, index_in, index_tar)
+            # sum1 = 0
+            # sum2 = 0
+            # print()
+            # for i in plot_prediction:
+            #     for j in target_humidity:
+            #         sum1+=abs(i[0]-j)
+            #         sum2+=i[0]-j
+            # print(sum1/len(plot_prediction))
+            # print(sum2)
 
         logger.info(f"Loss On Unseen Dataset: {val_loss.item()}")

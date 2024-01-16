@@ -43,9 +43,10 @@ class SensorDataset(Dataset):
         sensor_number = str(self.df[self.df["reindexed_id"]==idx][["sensor_id"]][start:start+1].values.item())
         index_in = torch.tensor([i for i in range(start, start+self.T)])
         index_tar = torch.tensor([i for i in range(start + self.T, start + self.T + self.S)])
-        _input = torch.tensor(self.df[self.df["reindexed_id"]==idx][["humidity", "sin_hour", "cos_hour", "sin_day", "cos_day", "sin_month", "cos_month"]][start : start + self.T].values)
-        target = torch.tensor(self.df[self.df["reindexed_id"]==idx][["humidity", "sin_hour", "cos_hour", "sin_day", "cos_day", "sin_month", "cos_month"]][start + self.T : start + self.T + self.S].values)
-
+        _input = torch.tensor(self.df[self.df["reindexed_id"]==idx][["OT", "HULL","MUFL","MULL","LUFL","LULL","HUFL","sin_hour", "cos_hour", "sin_day", "cos_day", "sin_month", "cos_month"]][start : start + self.T].values)
+        target = torch.tensor(self.df[self.df["reindexed_id"]==idx][["OT", "HULL","MUFL","MULL","LUFL","LULL","HUFL","sin_hour", "cos_hour", "sin_day", "cos_day", "sin_month", "cos_month"]][start + self.T : start + self.T + self.S].values)
+        # print(index_in.shape)
+        # print(_input.shape)
         # scalar is fit only to the input, to avoid the scaled values "leaking" information about the target range.
         # scalar is fit only for humidity, as the timestamps are already scaled
         # scalar input/output of shape: [n_samples, n_features].
